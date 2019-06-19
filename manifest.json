@@ -1,0 +1,35 @@
+{
+    "name": "环球网校帐号切换管理工具",
+    "manifest_version": 2,
+    "version": "2.0",
+    "description": "用于测试频繁切换用户，自动输入帐号密码，自动退出跳转；此插件为开发测试简化了5次点击，1次页面跳转，n多次键盘敲击",
+    "icons": {
+        "16": "hqwxlogo.png",
+        "48": "hqwxlogo.png",
+        "128": "hqwxlogo.png"
+    },
+    "permissions": [
+        "contextMenus", // 右键菜单
+        "tabs", // 标签
+        "notifications", // 通知
+        "webRequest", // web请求
+        "webRequestBlocking",
+        "storage", // 插件本地存储
+        "http://*/*", // 可以通过executeScript或者insertCSS访问的网站
+        "https://*/*" // 可以通过executeScript或者insertCSS访问的网站
+    ],
+    "browser_action": {
+        "default_icon": "hqwxlogo.png",
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "persistent": true,
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://www.hqwx.com/*"],
+            "js": ["login.js"]
+        }
+    ]
+}

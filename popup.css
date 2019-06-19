@@ -1,0 +1,52 @@
+.u_name {
+    heigh: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 5px;
+    margin: 5px 10px;
+}
+
+.u_name:hover {
+    color: #ff8383;
+}
+
+.u_name.active {
+    background: #ff8383;
+}
+
+.u_name.active:hover {
+    color: #ffffff;
+}
+
+.exit {
+    heigh: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 5px;
+    margin: 5px 10px;
+}
+
+.exit:hover {
+    color: #ff8383;
+}
+
+.submit {
+    border: 1px solid #ff8383;
+    width: 80px;
+    display: block;
+    height: 30px;
+    background: #ff8383;
+    margin: auto;
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+input {
+    height: 20px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
