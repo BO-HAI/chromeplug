@@ -1,5 +1,9 @@
+body {
+    width: 400px;
+}
+
 .u_name {
-    heigh: 30px;
+    height: 30px;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
@@ -20,7 +24,7 @@
 }
 
 .exit {
-    heigh: 30px;
+    height: 30px;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
@@ -30,6 +34,14 @@
 
 .exit:hover {
     color: #ff8383;
+}
+
+form {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #dddddd;
+    background: #f1f1f1;
+    padding-bottom: 20px;
 }
 
 .submit {
