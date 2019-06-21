@@ -1,17 +1,21 @@
 
-var db, db_name = 'hqwx', db_version = 6, userTable = 'users';
+var db, db_name = 'hqwx', db_version = 11, userTable = 'users', formTable = 'forms';
 
 var DBOpenRequest = window.indexedDB.open(db_name, db_version);
 
-DBOpenRequest.onsuccess = function () {
-    console.log('数据库连接成功');
-    db = DBOpenRequest.result;
-};
+// DBOpenRequest.onsuccess = function () {
+//     console.log('数据库连接成功');
+//     db = DBOpenRequest.result;
+// };
 
 DBOpenRequest.onupgradeneeded = function (event) {
     // var db = event.target.result;
 
     var userStore = event.target.result.createObjectStore(userTable, {
+        keyPath: 'id',
+        autoIncrement: true
+    }),
+    formStore = event.target.result.createObjectStore(formTable, {
         keyPath: 'id',
         autoIncrement: true
     });
@@ -24,30 +28,53 @@ DBOpenRequest.onupgradeneeded = function (event) {
         unique: true
     });
     userStore.createIndex('pwd', 'pwd');
-};
 
+    formStore.createIndex('url', 'url');
+    formStore.createIndex('form', 'form');
+};
 
 (function () {
     var testUser = chrome.extension.getBackgroundPage().testUser;
-    var userlist = localStorage.getItem('users');
 
-    if (userlist) {
-        userlist = userlist.split(';');
+    DBOpenRequest.onsuccess = function () {
+        console.log('数据库连接成功');
+        db = DBOpenRequest.result;
 
-        userlist.forEach(function (item) {
-            if (item.length === 0) {
-                return;
+        var userStore = db.transaction(userTable).objectStore(userTable);
+        userStore.openCursor().onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+                // cursor.value就是数据对象
+                // 游标没有遍历完，继续
+                testUser[cursor.value.name] = cursor.value.pwd;
+                $('.users-block').append('<p class="u_name" data-id="' + cursor.value.name + '" data-method="selectuser" data-type="zdy">' + cursor.value.name + '</p>');
+                cursor.continue();
+            } else {
+                // 如果全部遍历完毕...
+                console.log(testUser);
             }
-            var userinfo = item.split('/');
+        }
+    };
 
-            testUser[userinfo[0]] = userinfo[1];
+    // var userlist = localStorage.getItem('users');
+    //
+    // if (userlist) {
+    //     userlist = userlist.split(';');
+    //
+    //     userlist.forEach(function (item) {
+    //         if (item.length === 0) {
+    //             return;
+    //         }
+    //         var userinfo = item.split('/');
+    //
+    //         testUser[userinfo[0]] = userinfo[1];
+    //
+    //
+    //         $('.users-block').append('<p class="u_name" data-id="' + userinfo[0] + '" data-method="selectuser" data-type="zdy">' + userinfo[0] + '</p>');
+    //     });
+    // }
 
-
-            $('.users-block').append('<p class="u_name" data-id="' + userinfo[0] + '" data-method="selectuser" data-type="zdy">' + userinfo[0] + '</p>');
-        });
-    }
-
-    $('[data-method]').on('click', function () {
+    $('body').on('click', '[data-method]', function () {
         var $this = $(this);
         var method = $this.data('method');
 
@@ -73,21 +100,19 @@ DBOpenRequest.onupgradeneeded = function (event) {
             case 'submit':
                 var username = $('[name="username"]').val();
                 var password = $('[name="password"]').val();
-                var users = localStorage.getItem('users') === null ? '' : localStorage.getItem('users');
+                // var users = localStorage.getItem('users') === null ? '' : localStorage.getItem('users');
 
                 if ((username !== '') || (password !== '')) {
-                    localStorage.setItem('users', users + username + '/' + password + ';');
+                    db.transaction(userTable, "readwrite").objectStore(userTable).add({
+                        name: username,
+                        pwd: password
+                    });
 
-                    alert('添加成功!');
+                    alert('添加成功！');
+
                 } else {
                     alert('这位童鞋，这块板儿砖是你掉的吗？');
                 }
-
-                db.transaction(userTable, "readwrite").objectStore(userTable).add({
-                    name: username,
-                    pwd: password
-                });
-
             break;
             case 'changeTab':
                 var id = $this.data('tab-id');
