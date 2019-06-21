@@ -13,7 +13,8 @@
     var p = localStorage.getItem('chrome_hqwz_password');
 
     if (u && p && location.href.indexOf('login') > -1) {
-
+        // alert(u);
+        // alert(p);
         document.getElementById("gEdu-loginDialog-account").value = u;
         document.getElementById("gEdu-loginDialog-pwd").value = p;
 
@@ -77,6 +78,18 @@
             break;
             case 'analyse':
                 alert(request.status);
+                // var elements = document.getElementsByTagName('input');
+                // var i, len;
+                // for (i = 0, len = elements.length; i < len; i++) {
+                //     console.log(elements[i]);
+                //
+                //     elements[i].style.border = '1px solid red';
+                // }
+
+                $('input, select').css({
+                    'border': '1px solid red'
+                });
+
                 sendResponse('');
                 // console.log(document.getElementsByTagName('input'));
             // break;
