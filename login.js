@@ -32,7 +32,8 @@
                 // var button = document.getElementsByClassName('submit-button')[0];
                 //
                 // button.click();
-
+                // alert(request.username);
+                // alert(request.pwd);
                 if (location.href.indexOf('login') > -1) {
                     return;
                 }
@@ -53,6 +54,7 @@
                 setTimeout(function () {
                     location.href = 'http://www.hqwx.com/login/?chromeu=' + request.username + '&chromep=' + request.pwd + '&gotohere=' + encodeURIComponent(location.href);
                 }, 500);
+                sendResponse('');
             break;
 
             case 'exit':
@@ -71,7 +73,13 @@
                 setTimeout(function () {
                     location.href = 'http://www.hqwx.com/login/?gotohere=' + encodeURIComponent(location.href);
                 }, 500);
+                sendResponse('');
             break;
+            case 'analyse':
+                alert(request.status);
+                sendResponse('');
+                // console.log(document.getElementsByTagName('input'));
+            // break;
         }
         //Error: Unchecked runtime.lastError: The message port closed before a response wa received.
         sendResponse('');

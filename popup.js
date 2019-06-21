@@ -1,5 +1,5 @@
 
-var db, db_name = 'hqwx', db_version = 11, userTable = 'users', formTable = 'forms';
+var db, db_name = 'hqwx', db_version = 12, userTable = 'users', formTable = 'forms';
 
 var DBOpenRequest = window.indexedDB.open(db_name, db_version);
 
@@ -93,6 +93,13 @@ DBOpenRequest.onupgradeneeded = function (event) {
             case 'exit':
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
                     chrome.tabs.sendMessage(tabs[0].id, {message:"exit"}, function(response) {
+                    });//end  sendMessage
+                }); //end query
+            break;
+
+            case 'analyse':
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                    chrome.tabs.sendMessage(tabs[0].id, {message:"analyse", status: 200}, function(response) {
                     });//end  sendMessage
                 }); //end query
             break;

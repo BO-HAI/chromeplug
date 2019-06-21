@@ -85,7 +85,11 @@ header nav span.active:before {
     padding-bottom: 20px;
 }
 
-.tab-block-1 .submit {
+.tab-block-2 {
+    display: none;
+}
+
+.button {
     border: 1px solid #ff8383;
     width: 80px;
     display: block;
