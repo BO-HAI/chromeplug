@@ -1,29 +1,49 @@
 body {
     width: 400px;
+    min-height: 400px;
+    margin: 0;
+    padding: 0;
 }
 
-.u_name {
-    height: 30px;
-    line-height: 30px;
+header {
+    height: 40px;
+    line-height: 40px;
+    background: #ff8283;
+    color: #f7b1b1;
+    border-bottom: 2px solid #5263ff;
+}
+
+header nav {
+    display: flex;
+}
+
+header nav span {
+    flex: 1;
     text-align: center;
     cursor: pointer;
-    padding: 0 5px;
-    margin: 5px 10px;
+    position: relative;
 }
 
-.u_name:hover {
-    color: #ff8383;
-}
-
-.u_name.active {
-    background: #ff8383;
-}
-
-.u_name.active:hover {
+header nav span:hover {
     color: #ffffff;
 }
 
-.exit {
+header nav span.active {
+    color: #ffffff;
+}
+
+header nav span.active:before {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: #ff8283;
+    position: absolute;
+    bottom: 0;
+}
+
+
+.tab-block-1 .u_name {
     height: 30px;
     line-height: 30px;
     text-align: center;
@@ -32,11 +52,32 @@ body {
     margin: 5px 10px;
 }
 
-.exit:hover {
+.tab-block-1 .u_name:hover {
     color: #ff8383;
 }
 
-form {
+.tab-block-1 .u_name.active {
+    /* background: #ff8383; */
+}
+
+.tab-block-1 .u_name.active:hover {
+    /* color: #ffffff; */
+}
+
+.tab-block-1 .exit {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 5px;
+    margin: 5px 10px;
+}
+
+.tab-block-1 .exit:hover {
+    color: #ff8383;
+}
+
+.tab-block-1 form {
     text-align: center;
     padding-top: 20px;
     border-top: 1px solid #dddddd;
@@ -44,7 +85,7 @@ form {
     padding-bottom: 20px;
 }
 
-.submit {
+.tab-block-1 .submit {
     border: 1px solid #ff8383;
     width: 80px;
     display: block;
@@ -53,6 +94,8 @@ form {
     margin: auto;
     margin-top: 20px;
     color: #ffffff;
+    width: 100px;
+    border-radius: 3px;
 }
 
 input {
