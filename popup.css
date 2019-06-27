@@ -129,3 +129,19 @@ input {
 .alert-success {
     background: #f78283;
 }
+
+
+#analyse-form label {
+    width: 80px;
+    display: inline-block;
+    text-align: center;
+}
+
+#analyse-form {
+    margin: 10px;
+}
+
+#analyse-form .form-group {
+    color: #ffffff;
+    /* margin-top: 20px; */
+}

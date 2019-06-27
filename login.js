@@ -195,7 +195,8 @@ function randomColor () {
                         name,
                         klass,
                         type,
-                        tagname: tagName
+                        tagname: tagName,
+                        value
                     }
                 });
 
@@ -203,7 +204,7 @@ function randomColor () {
 
                 console.log(inputObj);
 
-                chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj});
+                chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj, url: location.href});
 
                 /**
                  * 写空回调函数会报告一个错误：Unchecked runtime.lastError: The message port closed before a response was received.

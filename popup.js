@@ -1,5 +1,5 @@
 
-var db, db_name = 'hqwx', db_version = 12, userTable = 'users', formTable = 'forms';
+var db, db_name = 'hqwx', db_version = 12, userTable = 'users', formTable = 'forms', formObj = null, formUrl = '';
 
 var DBOpenRequest = window.indexedDB.open(db_name, db_version);
 
@@ -108,6 +108,14 @@ DBOpenRequest.onupgradeneeded = function (event) {
                 $this.addClass('active').siblings('span').removeClass('active');
                 $('.tab-block-' + id).show().siblings('.tab-block').hide();
             break;
+            case 'submit-analyse':
+                db.transaction(formTable, "readwrite").objectStore(formTable).add({
+                    url: formUrl,
+                    form: formObj
+                });
+
+                alert('添加成功！');
+            break;
         }
 
     });
@@ -116,21 +124,25 @@ DBOpenRequest.onupgradeneeded = function (event) {
         switch (request.message) {
             case 'analyse':
                 console.log(request.inputs);
+                formObj = request.inputs;
+                formUrl = request.url;
                 let $form = $('#analyse-form');
                 let html = '';
                 if ($form.length === 0) {
-                    $('.tab-block-2').append('<form id="analyse-form"></form>');
+                    $form = $('<form id="analyse-form"></form>');
+                    $('.tab-block-2').append($form);
                 }
 
                 for (key in request.inputs) {
                     console.log(key);
 
-                    switch (request.inputs[key].tagname) {
-
-                    }
+                    html += '<div class="form-group" id="' + key + '" style="background: #' + key + '"><label>' + request.inputs[key].name + '</label><input type="text" value="' + request.inputs[key].value + '" placeholder="' + request.inputs[key].value + '"><label>' + key + '</label></div>';
                 }
 
-                $form.append();
+                $form.html(html);
+
+                console.log(request.url);
+
             break;
         }
     });
