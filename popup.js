@@ -116,6 +116,21 @@ DBOpenRequest.onupgradeneeded = function (event) {
         switch (request.message) {
             case 'analyse':
                 console.log(request.inputs);
+                let $form = $('#analyse-form');
+                let html = '';
+                if ($form.length === 0) {
+                    $('.tab-block-2').append('<form id="analyse-form"></form>');
+                }
+
+                for (key in request.inputs) {
+                    console.log(key);
+
+                    switch (request.inputs[key].tagname) {
+
+                    }
+                }
+
+                $form.append();
             break;
         }
     });

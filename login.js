@@ -97,6 +97,8 @@ function randomColor () {
 
                 if ($('#chrome-ex-colors').length === 0) {
                     $('body').append('<dev id="chrome-ex-colors"></dev>');
+                } else {
+                    $('#chrome-ex-colors').html('');
                 }
 
                 $('input, select, textarea').each(function (index, item) {
@@ -109,6 +111,7 @@ function randomColor () {
                     let name = $item.attr('name');
                     let id = $item.attr('id');
                     let klass = $item.attr('class');
+                    let value = $item.val();
 
                     if (color === '#ffffff' || color === '#000000') {
                         color = randomColor();
@@ -134,13 +137,13 @@ function randomColor () {
                             'left': offset.left + 'px',
                             'z-index': 9999999
                         })
-                        .html(color + '<p></p>')
-                        .attr('title', '[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+                        .html(color + '<p></p>');
 
                         $div.css({
                             'margin-left': ($div.width() + 30) * -1 + 'px',
                         });
                     } else {
+                        // 隐藏表单
                         $div.css({
                             'width': 'auto',
                             'height': '30px',
@@ -152,8 +155,7 @@ function randomColor () {
                             'border': '1px solid #000000',
                             'position': 'relative'
                         })
-                        .html(color + '<p></p>')
-                        .attr('title', '[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+                        .html(color + '<p></p>');
                     }
 
                     $div.find('p').css({
@@ -168,7 +170,7 @@ function randomColor () {
                         'padding': '3px 10px',
                         'border-radius': '3px',
                         'font-size': '12px'
-                    }).text('[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+                    }).text('[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"] [value="' + value + '"]');
 
                     $div
                     .mouseenter(function(){
@@ -193,6 +195,7 @@ function randomColor () {
                         name,
                         klass,
                         type,
+                        tagname: tagName
                     }
                 });
 
