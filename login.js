@@ -1,3 +1,18 @@
+function randomColor () {
+    var i = 0,
+        str = "#",
+        random = 0,
+        aryNum = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+
+    for(i = 0; i < 6; i++)
+    {
+    	random = parseInt(Math.random() * 16);
+
+    	str += aryNum[random];
+    }
+
+    return str;
+}
 
 (function () {
     function getQueryString () {
@@ -77,18 +92,40 @@
                 sendResponse('');
             break;
             case 'analyse':
-                alert(request.status);
-                // var elements = document.getElementsByTagName('input');
-                // var i, len;
-                // for (i = 0, len = elements.length; i < len; i++) {
-                //     console.log(elements[i]);
-                //
-                //     elements[i].style.border = '1px solid red';
-                // }
+                console.log(request.status);
+                $('input, select, textarea').each(function (index, item) {
+                    let color = randomColor();
+                    if (color === '#ffffff' || color === '#000000') {
+                        color = randomColor();
+                    }
+                    let colorNumber = color.substring(1, color.length);
+                    
+                    let $dev = $('<dev id="chrome-ex-color-' + colorNumber + '"></dev>');
+                    $dev.css({
+                        'width': '100px',
+                        'height': '30px',
+                        'background': color,
+                        'line-height': '30px',
+                        'text-align': 'center',
+                        'color': '#ffffff',
+                        'padding': '5px 10px',
+                        'border': '1px solid #000000'
+                    }).text(color);
+                    $('body').append($dev);
 
-                $('input, select').css({
-                    'border': '1px solid red'
+                    $(item).css({
+                        'border': '2px solid ' + color,
+                        // 'width': '100%',
+                        // 'height': '28px',
+                        'display': 'block',
+                        'opacity': 1
+                    });
                 });
+
+
+                // $('input, select').css({
+                //     'border': '2px solid ' + randomColor()
+                // });
 
                 sendResponse('');
                 // console.log(document.getElementsByTagName('input'));
