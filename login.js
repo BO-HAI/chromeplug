@@ -93,45 +93,127 @@ function randomColor () {
             break;
             case 'analyse':
                 console.log(request.status);
+                let inputObj = {}; // 传递给popup的表单元素对象数组
+
+                if ($('#chrome-ex-colors').length === 0) {
+                    $('body').append('<dev id="chrome-ex-colors"></dev>');
+                }
+
                 $('input, select, textarea').each(function (index, item) {
                     let color = randomColor();
+                    let $item = $(item);
+
+                    let offset = $item.offset();
+                    let tagName = $item.prop('tagName');
+                    let type =  $item.attr('type');
+                    let name = $item.attr('name');
+                    let id = $item.attr('id');
+                    let klass = $item.attr('class');
+
                     if (color === '#ffffff' || color === '#000000') {
                         color = randomColor();
                     }
                     let colorNumber = color.substring(1, color.length);
-                    
-                    let $dev = $('<dev id="chrome-ex-color-' + colorNumber + '"></dev>');
-                    $dev.css({
-                        'width': '100px',
-                        'height': '30px',
-                        'background': color,
-                        'line-height': '30px',
-                        'text-align': 'center',
-                        'color': '#ffffff',
-                        'padding': '5px 10px',
-                        'border': '1px solid #000000'
-                    }).text(color);
-                    $('body').append($dev);
 
-                    $(item).css({
+                    let $div = $('<div data-method="chrome_ex_hide" data-color="' + color + '" id="chrome-ex-color-' + colorNumber + '"></div>');
+
+                    $('#chrome-ex-colors').append($div); // 先加入页面 是为了计算宽度
+
+                    if (type !== 'hidden') {
+                        $div.css({
+                            'width': 'atuo',
+                            'height': '30px',
+                            'background': color,
+                            'line-height': '30px',
+                            'text-align': 'center',
+                            'color': '#ffffff',
+                            'padding': '0 10px',
+                            'border': '1px solid #000000',
+                            'position': 'absolute',
+                            'top': offset.top + 'px',
+                            'left': offset.left + 'px',
+                            'z-index': 9999999
+                        })
+                        .html(color + '<p></p>')
+                        .attr('title', '[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+
+                        $div.css({
+                            'margin-left': ($div.width() + 30) * -1 + 'px',
+                        });
+                    } else {
+                        $div.css({
+                            'width': 'auto',
+                            'height': '30px',
+                            'background': color,
+                            'line-height': '30px',
+                            'text-align': 'center',
+                            'color': '#ffffff',
+                            'padding': '0 10px',
+                            'border': '1px solid #000000',
+                            'position': 'relative'
+                        })
+                        .html(color + '<p></p>')
+                        .attr('title', '[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+                    }
+
+                    $div.find('p').css({
+                        'position': 'absolute',
+                        'opacity': 0,
+                        'top': '-21px',
+                        'left': 0,
+                        'background': '#2f2f2f',
+                        'white-space': 'nowrap',
+                        'height': '12px',
+                        'line-height': '12px',
+                        'padding': '3px 10px',
+                        'border-radius': '3px',
+                        'font-size': '12px'
+                    }).text('[tagName="' + tagName + '"] [id="' + id + '"] [type="' + type + '"] [name="' + name + '"] [class="' + klass + '"]');
+
+                    $div
+                    .mouseenter(function(){
+                        $(this).find('p').css({
+                            'opacity': 1
+                        });
+                    })
+                    .mouseleave(function(){
+                        $(this).find('p').css({
+                            'opacity': 0
+                        });
+                    });
+
+                    $item.css({
                         'border': '2px solid ' + color,
-                        // 'width': '100%',
-                        // 'height': '28px',
                         'display': 'block',
                         'opacity': 1
                     });
+
+                    inputObj[colorNumber] = {
+                        id,
+                        name,
+                        klass,
+                        type,
+                    }
                 });
 
 
-                // $('input, select').css({
-                //     'border': '2px solid ' + randomColor()
+
+                console.log(inputObj);
+
+                chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj});
+
+                /**
+                 * 写空回调函数会报告一个错误：Unchecked runtime.lastError: The message port closed before a response was received.
+                 */
+                // chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj}, function (response) {
+                //
                 // });
 
                 sendResponse('');
-                // console.log(document.getElementsByTagName('input'));
-            // break;
+
+            break;
         }
         //Error: Unchecked runtime.lastError: The message port closed before a response wa received.
         sendResponse('');
-    })
+    });
 }());

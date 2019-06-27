@@ -4,11 +4,14 @@ var testUser = {
     huanju14: '123456yy',
     cs11: '123456',
     15652824466: '123456'
-}
+};
+
+var colors = '31231313';
 
 chrome.runtime.onMessage.addListener(function (req, sender, sendResponse) {
+    // sendResponse({
+    //     testUser
+    // });
 
-    sendResponse({
-        testUser
-    });
+    // sendResponse('hi!');
 });

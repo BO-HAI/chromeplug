@@ -56,24 +56,6 @@ DBOpenRequest.onupgradeneeded = function (event) {
         }
     };
 
-    // var userlist = localStorage.getItem('users');
-    //
-    // if (userlist) {
-    //     userlist = userlist.split(';');
-    //
-    //     userlist.forEach(function (item) {
-    //         if (item.length === 0) {
-    //             return;
-    //         }
-    //         var userinfo = item.split('/');
-    //
-    //         testUser[userinfo[0]] = userinfo[1];
-    //
-    //
-    //         $('.users-block').append('<p class="u_name" data-id="' + userinfo[0] + '" data-method="selectuser" data-type="zdy">' + userinfo[0] + '</p>');
-    //     });
-    // }
-
     $('body').on('click', '[data-method]', function () {
         var $this = $(this);
         var method = $this.data('method');
@@ -128,5 +110,13 @@ DBOpenRequest.onupgradeneeded = function (event) {
             break;
         }
 
+    });
+
+    chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+        switch (request.message) {
+            case 'analyse':
+                console.log(request.inputs);
+            break;
+        }
     });
 }());
