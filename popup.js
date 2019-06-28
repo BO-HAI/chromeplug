@@ -90,7 +90,7 @@ DBOpenRequest.onupgradeneeded = function (event) {
                 let select = $('#form-select').val();
 
                 if (select === '-1') {
-                    select = 'form';
+                    select = '';
                 }
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
                     chrome.tabs.sendMessage(tabs[0].id, {message:"analyse_user_page", status: 200, select: select}, function(response) {
