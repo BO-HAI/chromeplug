@@ -117,12 +117,12 @@ DBOpenRequest.onupgradeneeded = function (event) {
 
                 if (id === 3) {
                     let formStore = db.transaction(formTable).objectStore(formTable);
-                    // formStore.openCursor(IDBKeyRange.only([formUrl])).onsuccess = function(event) {
+                    // formStore.openCursor(IDBKeyRange.only('http://user.hqwx.com/uc/question/add?cid=5592')).onsuccess = function(event) {
                     //     console.log(event.target.result);
                     // }
 
                     let index = formStore.index('url');
-                    index.get('http://user.hqwx.com/uc/question/add?cid=5592').onsuccess = function (e) {
+                    index.getAll('http://user.hqwx.com/uc/question/add?cid=5592').onsuccess = function (e) {
                         console.log(e.target.result);
                     };
                 }

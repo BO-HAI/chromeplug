@@ -88,8 +88,24 @@ header nav span.active:before {
     color: #333333;
 }
 
+.tab-block-1 form .button {
+    margin-top: 20px;
+}
+
 .tab-block-2 {
     display: none;
+}
+
+.tab-block-2 .button-group {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.tab-block-2 .button-group .button {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .button {
@@ -99,10 +115,11 @@ header nav span.active:before {
     height: 30px;
     background: #ff8383;
     margin: auto;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     color: #ffffff;
     width: 100px;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 input {
