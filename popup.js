@@ -138,6 +138,17 @@ DBOpenRequest.onupgradeneeded = function (event) {
                     let index = formStore.index('url');
                     index.getAll(formUrl).onsuccess = function (e) {
                         console.log(e.target.result);
+
+                        let $vformBlock = $('<div class="virtual-form-group"></div>');
+
+                        e.target.result.forEach(function (item, index) {
+                            var $vform = $('<div class="virtual-form">表单' + (index + 1) + '</div>');
+
+                            $vform.attr('data-', );
+                            $vformBlock.append($form);
+                        });
+
+                        $('.tab-block-3').html('').append($vformBlock);
                     };
                 }
             break;
@@ -167,13 +178,18 @@ DBOpenRequest.onupgradeneeded = function (event) {
                 //     $('.tab-block-2').append($form);
                 // }
 
-                for (key in request.inputs) {
-                    console.log(key);
+                // for (key in request.inputs) {
+                //     console.log(key);
+                //
+                //     request.inputs[key].type = request.inputs[key].type === undefined ? '' : request.inputs[key].type;
+                //
+                //     html += '<div class="form-group" id="' + key + '" style="background: #' + key + '"><label>' + request.inputs[key].name + '</label><input type="text" value="' + request.inputs[key].value + '" placeholder="' + key + '"><span>' + request.inputs[key].tagname + ' | ' + request.inputs[key].type + '</span></div>';
+                // }
 
-                    request.inputs[key].type = request.inputs[key].type === undefined ? '' : request.inputs[key].type;
-
-                    html += '<div class="form-group" id="' + key + '" style="background: #' + key + '"><label>' + request.inputs[key].name + '</label><input type="text" value="' + request.inputs[key].value + '" placeholder="' + key + '"><span>' + request.inputs[key].tagname + ' | ' + request.inputs[key].type + '</span></div>';
-                }
+                formObj.forEach(function (item) {
+                    item.type = item.type === 'undefined' ? '' : item.type;
+                    html += '<div class="form-group" id="' + item.color + '" style="background:' + item.color + '"><label>' + item.name + '</label><input type="text" value="' + item.value + '" placeholder="' + item.color + '"><span>' + item.tagname + ' | ' + item.type + '</span></div>';
+                });
 
                 $form.html(html);
 

@@ -96,7 +96,7 @@ function randomColor () {
 
             case 'analyse_user_page':
                 console.log(request.status);
-                let inputObj = {}; // 传递给popup的表单元素对象数组
+                let inputObj = []; // 传递给popup的表单元素对象数组
                 let $inputs = null;
 
                 /**
@@ -203,14 +203,15 @@ function randomColor () {
                         'opacity': 1
                     });
 
-                    inputObj[colorNumber] = {
+                    inputObj.push({
                         id,
                         name,
                         klass,
                         type,
                         tagname: tagName,
-                        value
-                    }
+                        value,
+                        color: color
+                    });
                 });
 
                 console.log(inputObj);
