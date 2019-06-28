@@ -3,14 +3,16 @@ body {
     min-height: 400px;
     margin: 0;
     padding: 0;
+    background: #3c3c3c;
+    color: #ffffff;
 }
 
 header {
     height: 40px;
     line-height: 40px;
-    background: #ff8283;
-    color: #f7b1b1;
-    border-bottom: 2px solid #5263ff;
+    background: #1b1b1b;
+    color: #ffffff;
+    /* border-bottom: 2px solid #5263ff; */
 }
 
 header nav {
@@ -25,11 +27,11 @@ header nav span {
 }
 
 header nav span:hover {
-    color: #ffffff;
+    color: #f7b1b1;
 }
 
 header nav span.active {
-    color: #ffffff;
+    color: #f7b1b1;
 }
 
 header nav span.active:before {
@@ -83,6 +85,7 @@ header nav span.active:before {
     border-top: 1px solid #dddddd;
     background: #f1f1f1;
     padding-bottom: 20px;
+    color: #333333;
 }
 
 .tab-block-2 {

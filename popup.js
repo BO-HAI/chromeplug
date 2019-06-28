@@ -1,5 +1,10 @@
 
-var db, db_name = 'hqwx', db_version = 12, userTable = 'users', formTable = 'forms', formObj = null, formUrl = '';
+var db, db_name = 'hqwx',
+    db_version = 23,
+    userTable = 'users',
+    formTable = 'forms',
+    formObj = null,
+    formUrl = '';
 
 var DBOpenRequest = window.indexedDB.open(db_name, db_version);
 
@@ -29,7 +34,9 @@ DBOpenRequest.onupgradeneeded = function (event) {
     });
     userStore.createIndex('pwd', 'pwd');
 
-    formStore.createIndex('url', 'url');
+    formStore.createIndex('url', 'url', {
+        unique: false
+    });
     formStore.createIndex('form', 'form');
 };
 
@@ -107,6 +114,18 @@ DBOpenRequest.onupgradeneeded = function (event) {
                 var id = $this.data('tab-id');
                 $this.addClass('active').siblings('span').removeClass('active');
                 $('.tab-block-' + id).show().siblings('.tab-block').hide();
+
+                if (id === 3) {
+                    let formStore = db.transaction(formTable).objectStore(formTable);
+                    // formStore.openCursor(IDBKeyRange.only([formUrl])).onsuccess = function(event) {
+                    //     console.log(event.target.result);
+                    // }
+
+                    let index = formStore.index('url');
+                    index.get('http://user.hqwx.com/uc/question/add?cid=5592').onsuccess = function (e) {
+                        console.log(e.target.result);
+                    };
+                }
             break;
             case 'submit-analyse':
                 db.transaction(formTable, "readwrite").objectStore(formTable).add({
