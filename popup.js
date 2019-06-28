@@ -85,15 +85,20 @@ DBOpenRequest.onupgradeneeded = function (event) {
                     });//end  sendMessage
                 }); //end query
             break;
+            // 分析用户页面表单请求
+            case 'analyse_user_page':
+                let select = $('#form-select').val();
 
-            case 'analyse':
+                if (select === '-1') {
+                    select = 'form';
+                }
                 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                    chrome.tabs.sendMessage(tabs[0].id, {message:"analyse", status: 200}, function(response) {
+                    chrome.tabs.sendMessage(tabs[0].id, {message:"analyse_user_page", status: 200, select: select}, function(response) {
                     });//end  sendMessage
                 }); //end query
             break;
-
-            case 'submit':
+            // 提交用户信息
+            case 'submit_account':
                 var username = $('[name="username"]').val();
                 var password = $('[name="password"]').val();
                 // var users = localStorage.getItem('users') === null ? '' : localStorage.getItem('users');
@@ -110,24 +115,34 @@ DBOpenRequest.onupgradeneeded = function (event) {
                     alert('这位童鞋，这块板儿砖是你掉的吗？');
                 }
             break;
+            // 切换tab
             case 'changeTab':
                 var id = $this.data('tab-id');
                 $this.addClass('active').siblings('span').removeClass('active');
                 $('.tab-block-' + id).show().siblings('.tab-block').hide();
 
+                if (id === 2) {
+                    // tab2 触发指定函数
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                        chrome.tabs.sendMessage(tabs[0].id, {message:'get_user_page_forms', status: 200}, function(response) {
+                        });//end  sendMessage
+                    }); //end query
+                }
+
                 if (id === 3) {
                     let formStore = db.transaction(formTable).objectStore(formTable);
-                    // formStore.openCursor(IDBKeyRange.only('http://user.hqwx.com/uc/question/add?cid=5592')).onsuccess = function(event) {
+                    // formStore.openCursor(IDBKeyRange.only(formUrl)).onsuccess = function(event) {
                     //     console.log(event.target.result);
                     // }
 
                     let index = formStore.index('url');
-                    index.getAll('http://user.hqwx.com/uc/question/add?cid=5592').onsuccess = function (e) {
+                    index.getAll(formUrl).onsuccess = function (e) {
                         console.log(e.target.result);
                     };
                 }
             break;
-            case 'submit-analyse':
+            // 提交表单分析结果
+            case 'submit_analyse_result':
                 db.transaction(formTable, "readwrite").objectStore(formTable).add({
                     url: formUrl,
                     form: formObj
@@ -141,27 +156,45 @@ DBOpenRequest.onupgradeneeded = function (event) {
 
     chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
         switch (request.message) {
-            case 'analyse':
+            case 'analyse_render':
                 console.log(request.inputs);
                 formObj = request.inputs;
                 formUrl = request.url;
                 let $form = $('#analyse-form');
                 let html = '';
-                if ($form.length === 0) {
-                    $form = $('<form id="analyse-form"></form>');
-                    $('.tab-block-2').append($form);
-                }
+                // if ($form.length === 0) {
+                //     $form = $('<form id="analyse-form"></form>');
+                //     $('.tab-block-2').append($form);
+                // }
 
                 for (key in request.inputs) {
                     console.log(key);
 
-                    html += '<div class="form-group" id="' + key + '" style="background: #' + key + '"><label>' + request.inputs[key].name + '</label><input type="text" value="' + request.inputs[key].value + '" placeholder="' + request.inputs[key].value + '"><label>' + key + '</label></div>';
+                    request.inputs[key].type = request.inputs[key].type === undefined ? '' : request.inputs[key].type;
+
+                    html += '<div class="form-group" id="' + key + '" style="background: #' + key + '"><label>' + request.inputs[key].name + '</label><input type="text" value="' + request.inputs[key].value + '" placeholder="' + key + '"><span>' + request.inputs[key].tagname + ' | ' + request.inputs[key].type + '</span></div>';
                 }
 
                 $form.html(html);
 
                 console.log(request.url);
 
+            break;
+
+            case 'forms_render':
+                console.log('====响应页面：getForms====');
+                console.log(request);
+                formUrl = request.url;
+                $('#form-select').html('<option value="-1">--请选择--</option>');
+                request.forms.forEach(function (item) {
+                    if (item.id) {
+                        $('#form-select').append('<option value="#' + item.id + '">#' + item.id + '</option>');
+                    } else if (item.klass) {
+                        $('#form-select').append('<option value=".' + item.klass.replace(" ", ".") + '">.' + item.klass.replace(" ", ".") + '</option>');
+                    } else {
+                        $('#form-select').append('<option value="form">无名表单</option>');
+                    }
+                });
             break;
         }
     });

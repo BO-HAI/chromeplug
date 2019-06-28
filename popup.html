@@ -9,6 +9,12 @@
 </head>
 <body>
     <header>
+        <div class="logo-block">
+            <span class="span-1">Automated</span>
+            <span class="span-2">Testing</span>
+            <!-- <span class="span-3">by</span>
+            <span class="span-4">环球网校</span> -->
+        </div>
         <nav>
             <span class="active" data-method="changeTab" data-tab-id="1">帐号管理</span>
             <span data-method="changeTab"  data-tab-id="2">自动化表单</span>
@@ -16,7 +22,7 @@
         </nav>
     </header>
     <div class="tab-block tab-block-1">
-        <div class="users-block">
+        <div class="users-block clearfix">
             <p class="u_name" data-id="huanju12" data-method="selectuser">huanju12</p>
             <p class="u_name" data-id="huanju13" data-method="selectuser">huanju13</p>
             <p class="u_name" data-id="huanju14" data-method="selectuser">huanju14</p>
@@ -37,15 +43,22 @@
                 <input name="password" type="text">
             </div>
 
-            <button class="button" data-method="submit">添加</button>
+            <button class="button" data-method="submit_account">保存帐号</button>
         </form>
     </div>
     <div class="tab-block tab-block-2">
+        <form id="analyse-form"></form>
         <div class="button-group">
-            <button class="button" data-method="analyse">分析页面</button>
-            <button class="button" data-method="submit-analyse">保存结果</button>
-        </div>
+            <div class="form-group">
+                <label for="">选择要分析的表单：</label>
+                <select name="form-select" id="form-select">
 
+                </select>
+                <p>不选默认分析页面所有表单</p>
+            </div>
+            <button class="button" data-method="analyse_user_page">分析页面</button>
+            <button class="button" data-method="submit_analyse_result">保存结果</button>
+        </div>
     </div>
     <div class="tab-block tab-block-3">
 

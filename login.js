@@ -15,7 +15,7 @@ function randomColor () {
 }
 
 (function () {
-    function getQueryString () {
+    function getQueryString (name) {
         var reg = new RegExp('(^|&)@name=([^&]*)(&|$)'.replace('@name', name), 'i'),
             r = window.location.search.substr(1).match(reg);
         if (r !== null) {
@@ -24,8 +24,10 @@ function randomColor () {
         return null;
     }
 
-    var u = localStorage.getItem('chrome_hqwz_username');
-    var p = localStorage.getItem('chrome_hqwz_password');
+    // var u = localStorage.getItem('chrome_hqwz_username');
+    // var p = localStorage.getItem('chrome_hqwz_password');
+    var u = getQueryString('chromeu');
+    var p = getQueryString('chromep');
 
     if (u && p && location.href.indexOf('login') > -1) {
         // alert(u);
@@ -91,17 +93,28 @@ function randomColor () {
                 }, 500);
                 sendResponse('');
             break;
-            case 'analyse':
+
+            case 'analyse_user_page':
                 console.log(request.status);
                 let inputObj = {}; // 传递给popup的表单元素对象数组
+                let $inputs = null;
 
+                /**
+                 * 分析页面上的表单元素
+                 */
                 if ($('#chrome-ex-colors').length === 0) {
                     $('body').append('<dev id="chrome-ex-colors"></dev>');
                 } else {
                     $('#chrome-ex-colors').html('');
                 }
 
-                $('input, select, textarea').each(function (index, item) {
+                if (request.select === '') {
+                    $inputs = $('input, select, textarea');
+                } else {
+                    $inputs = $(request.select).find('input, select, textarea');
+                }
+
+                $inputs.each(function (index, item) {
                     let color = randomColor();
                     let $item = $(item);
 
@@ -200,21 +213,36 @@ function randomColor () {
                     }
                 });
 
-
-
                 console.log(inputObj);
 
-                chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj, url: location.href});
+                chrome.runtime.sendMessage({message: 'analyse_render', inputs: inputObj, url: location.href});
 
                 /**
                  * 写空回调函数会报告一个错误：Unchecked runtime.lastError: The message port closed before a response was received.
                  */
-                // chrome.runtime.sendMessage({message: 'analyse', inputs: inputObj}, function (response) {
+                // chrome.runtime.sendMessage({message: 'analyse_render', inputs: inputObj}, function (response) {
                 //
                 // });
 
                 sendResponse('');
 
+            break;
+
+            // 获取页面上的所有表单
+            case 'get_user_page_forms':
+                let forms = [];
+                let url = location.href;
+
+                $('form').each(function (index, item) {
+                    let $this = $(item);
+
+                    forms.push({
+                        id: $this.attr('id'),
+                        klass: $this.attr('class')
+                    });
+                });
+
+                chrome.runtime.sendMessage({message: 'forms_render', forms: forms, url: url});
             break;
         }
         //Error: Unchecked runtime.lastError: The message port closed before a response wa received.
