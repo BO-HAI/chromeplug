@@ -14,6 +14,43 @@ function randomColor () {
     return str;
 }
 
+function getElement (obj) {
+    var select = '';
+
+    if (obj.id) {
+        select += '#' + obj.id
+    }
+
+    if (obj.klass) {
+        select += '.' + obj.klass.replace(/ /g, '.');
+    }
+
+    if (obj.name) {
+        select += '[name="' + obj.name + '"]';
+    }
+
+    return $(select);
+}
+
+function createInput(obj) {
+
+    getElement(obj).val(obj.value);
+}
+
+function createSelect (obj) {
+    var $element = getElement(obj);
+
+    if ($element.html() === '') {
+        $element.append('<option value="' + obj.value + '">自动表单填写值</option>');
+    }
+
+    $element.val(obj.value);
+}
+
+function createTextarea (obj) {
+    getElement(obj).val(obj.value);
+}
+
 (function () {
     function getQueryString (name) {
         var reg = new RegExp('(^|&)@name=([^&]*)(&|$)'.replace('@name', name), 'i'),
@@ -259,10 +296,13 @@ function randomColor () {
 
                     switch (item.tagname) {
                         case 'INPUT':
+                            createInput(item);
                         break;
                         case 'SELECT':
+                            createSelect(item);
                         break;
                         case 'TEXTAREA':
+                            createTextarea(item);
                         break;
                     }
                 });
