@@ -185,6 +185,18 @@ input, textarea, select, button {
     margin-right: 10px;
 }
 
+.tab-block-3 .virtual-form {
+    border: 1px dashed #8a8a8a;
+    margin: 20px;
+    padding: 20px;
+    /* flex: 1; */
+    width: 50px;
+    text-align: center;
+    color: #8a8a8a;
+    float: left;
+    cursor: pointer;
+}
+
 .button {
     border: 1px solid #ff8383;
     width: 80px;

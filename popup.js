@@ -130,26 +130,34 @@ DBOpenRequest.onupgradeneeded = function (event) {
                 }
 
                 if (id === 3) {
-                    let formStore = db.transaction(formTable).objectStore(formTable);
-                    // formStore.openCursor(IDBKeyRange.only(formUrl)).onsuccess = function(event) {
-                    //     console.log(event.target.result);
-                    // }
+                    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                        chrome.tabs.sendMessage(tabs[0].id, {message:'get_url', status: 200}, function(response) {
+                        });//end  sendMessage
+                    }); //end query
 
-                    let index = formStore.index('url');
-                    index.getAll(formUrl).onsuccess = function (e) {
-                        console.log(e.target.result);
-
-                        let $vformBlock = $('<div class="virtual-form-group"></div>');
-
-                        e.target.result.forEach(function (item, index) {
-                            var $vform = $('<div class="virtual-form">表单' + (index + 1) + '</div>');
-
-                            $vform.attr('data-', );
-                            $vformBlock.append($form);
-                        });
-
-                        $('.tab-block-3').html('').append($vformBlock);
-                    };
+                    // let formStore = db.transaction(formTable).objectStore(formTable);
+                    // // formStore.openCursor(IDBKeyRange.only(formUrl)).onsuccess = function(event) {
+                    // //     console.log(event.target.result);
+                    // // }
+                    //
+                    // let index = formStore.index('url');
+                    // index.getAll(formUrl).onsuccess = function (e) {
+                    //     console.log(e.target.result);
+                    //
+                    //     let $vformBlock = $('<div class="virtual-form-group"></div>');
+                    //
+                    //     e.target.result.forEach(function (item, index) {
+                    //         let $vform = $('<div class="virtual-form">表单' + (index + 1) + '</div>');
+                    //         let str = JSON.stringify(item).replace(/"/g, "'");
+                    //
+                    //         $vform.attr('data-db-val', str);
+                    //         $vform.attr('data-db-id', item.id);
+                    //         console.log(item);
+                    //         $vformBlock.append($vform);
+                    //     });
+                    //
+                    //     $('.tab-block-3').html('').append($vformBlock);
+                    // };
                 }
             break;
             // 提交表单分析结果
@@ -161,10 +169,22 @@ DBOpenRequest.onupgradeneeded = function (event) {
 
                 alert('添加成功！');
             break;
+
+            case 'render_to_user_page':
+                let jsonStr = $this.data('db-val');
+                let json = JSON.parse(jsonStr.replace(/'/g, '"'));
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                    chrome.tabs.sendMessage(tabs[0].id, {message:"render_to_user_page", status: 200, json: json}, function(response) {
+                    });//end  sendMessage
+                }); //end query
+            break;
         }
 
     });
 
+    /**
+     * 响应页面请求              [description]
+     */
     chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
         switch (request.message) {
             case 'analyse_render':
@@ -211,6 +231,37 @@ DBOpenRequest.onupgradeneeded = function (event) {
                         $('#form-select').append('<option value="form">无名表单</option>');
                     }
                 });
+            break;
+
+            case 'set_url':
+                formUrl = request.url;
+
+                // 获取表单
+                let formStore = db.transaction(formTable).objectStore(formTable);
+                // formStore.openCursor(IDBKeyRange.only(formUrl)).onsuccess = function(event) {
+                //     console.log(event.target.result);
+                // }
+
+                let index = formStore.index('url');
+                index.getAll(formUrl).onsuccess = function (e) {
+                    console.log(e.target.result);
+
+                    let $vformBlock = $('<div class="virtual-form-group"></div>');
+
+                    e.target.result.forEach(function (item, index) {
+                        let $vform = $('<div class="virtual-form">表单' + (index + 1) + '</div>');
+                        let str = JSON.stringify(item).replace(/"/g, "'");
+
+                        $vform.attr('data-db-val', str);
+                        $vform.attr('data-db-id', item.id);
+                        $vform.attr('title', str);
+                        $vform.attr('data-method', 'render_to_user_page');
+                        console.log(item);
+                        $vformBlock.append($vform);
+                    });
+
+                    $('.tab-block-3').html('').append($vformBlock);
+                };
             break;
         }
     });

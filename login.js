@@ -245,8 +245,33 @@ function randomColor () {
 
                 chrome.runtime.sendMessage({message: 'forms_render', forms: forms, url: url});
             break;
+
+            case 'get_url':
+                chrome.runtime.sendMessage({message: 'set_url', url: location.href});
+            break;
+
+            case 'render_to_user_page':
+
+                console.log(request.json);
+
+                request.json.form.forEach(function (item) {
+                    console.log(item);
+
+                    switch (item.tagname) {
+                        case 'INPUT':
+                        break;
+                        case 'SELECT':
+                        break;
+                        case 'TEXTAREA':
+                        break;
+                    }
+                });
+
+            break;
         }
         //Error: Unchecked runtime.lastError: The message port closed before a response wa received.
         sendResponse('');
     });
+
+    console.log(111);
 }());
