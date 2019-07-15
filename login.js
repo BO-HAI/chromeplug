@@ -1,5 +1,5 @@
 function randomColor () {
-    var i = 0,
+    let i = 0,
         str = "#",
         random = 0,
         aryNum = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
@@ -15,7 +15,7 @@ function randomColor () {
 }
 
 function getElement (obj) {
-    var select = '';
+    let select = '';
 
     if (obj.id) {
         select += '#' + obj.id
@@ -32,13 +32,30 @@ function getElement (obj) {
     return $(select);
 }
 
-function createInput(obj) {
+function createInput (obj) {
+    if (obj.type === 'text') {
+        getElement(obj).val(obj.value);
+    }
 
-    getElement(obj).val(obj.value);
+    if (obj.type === 'radio') {
+        createRadio(obj);
+    }
+}
+
+function createRadio (obj) {
+    let $elements = getElement(obj);
+
+    $elements.each(function (index, item) {
+        console.log(item);
+        let $item = $(item);
+        if ($item.val() === obj.value) {
+            $item.attr('checked', 'checked');
+        }
+    });
 }
 
 function createSelect (obj) {
-    var $element = getElement(obj);
+    let $element = getElement(obj);
 
     if ($element.html() === '') {
         $element.append('<option value="' + obj.value + '">自动表单填写值</option>');
