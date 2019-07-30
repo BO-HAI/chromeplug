@@ -49,7 +49,7 @@ function createRadio (obj) {
         console.log(item);
         let $item = $(item);
         if ($item.val() === obj.value) {
-            $item.attr('checked', 'checked');
+            $item.prop('checked', true);
         }
     });
 }
@@ -152,6 +152,7 @@ function createTextarea (obj) {
                 console.log(request.status);
                 let inputObj = []; // 传递给popup的表单元素对象数组
                 let $inputs = null;
+                let tempRadioName = '';
 
                 /**
                  * 分析页面上的表单元素
@@ -171,14 +172,20 @@ function createTextarea (obj) {
                 $inputs.each(function (index, item) {
                     let color = randomColor();
                     let $item = $(item);
-
                     let offset = $item.offset();
                     let tagName = $item.prop('tagName');
                     let type =  $item.attr('type');
                     let name = $item.attr('name');
                     let id = $item.attr('id');
                     let klass = $item.attr('class');
-                    let value = $item.val();
+                    let value = '';
+
+                    if (type === 'radio') {
+                        value = $('input[name="' + name + '"]:checked').val()
+                    } else {
+                        value = $item.val();
+                    }
+
 
                     if (color === '#ffffff' || color === '#000000') {
                         color = randomColor();
@@ -257,15 +264,30 @@ function createTextarea (obj) {
                         'opacity': 1
                     });
 
-                    inputObj.push({
-                        id,
-                        name,
-                        klass,
-                        type,
-                        tagname: tagName,
-                        value,
-                        color: color
-                    });
+                    // TODO: bohai 筛选 input[type="radio"] input[type="checkbox"]
+
+                    if (type === 'radio' && tempRadioName.indexOf(name) === -1) {
+                        tempRadioName += name + ',';
+                        inputObj.push({
+                            id,
+                            name,
+                            klass,
+                            type,
+                            tagname: tagName,
+                            value,
+                            color: color
+                        });
+                    } else if (type !== 'radio') {
+                        inputObj.push({
+                            id,
+                            name,
+                            klass,
+                            type,
+                            tagname: tagName,
+                            value,
+                            color: color
+                        });
+                    }
                 });
 
                 console.log(inputObj);
