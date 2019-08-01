@@ -226,7 +226,7 @@ DBOpenRequest.onupgradeneeded = function (event) {
                     if (item.id) {
                         $('#form-select').append('<option value="#' + item.id + '">#' + item.id + '</option>');
                     } else if (item.klass) {
-                        $('#form-select').append('<option value=".' + item.klass.replace(" ", ".") + '">.' + item.klass.replace(" ", ".") + '</option>');
+                        $('#form-select').append('<option value=".' + item.klass.replace(/ /g, ".") + '">.' + item.klass.replace(/ /g, ".") + '</option>');
                     } else {
                         $('#form-select').append('<option value="form">无名表单</option>');
                     }

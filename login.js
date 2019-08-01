@@ -40,6 +40,10 @@ function createInput (obj) {
     if (obj.type === 'radio') {
         createRadio(obj);
     }
+
+    if (obj.type === 'checkbox') {
+        createCheckbox(obj);
+    }
 }
 
 function createRadio (obj) {
@@ -50,6 +54,24 @@ function createRadio (obj) {
         let $item = $(item);
         if ($item.val() === obj.value) {
             $item.prop('checked', true);
+
+            // 针对 环球网校 eui
+            $item.parent('.eui.radio').trigger('click');
+        }
+    });
+}
+
+function createCheckbox (obj) {
+    let $elements = getElement(obj);
+
+    $elements.each(function (index, item) {
+        console.log(item);
+        let $item = $(item);
+        if ($item.val() === obj.value) {
+            $item.prop('checked', true);
+
+            // 针对 环球网校 eui
+            $item.parent('.eui.checkbox').addClass('active');
         }
     });
 }
@@ -147,12 +169,12 @@ function createTextarea (obj) {
                 }, 500);
                 sendResponse('');
             break;
-
+            // 分析用户页面
             case 'analyse_user_page':
                 console.log(request.status);
                 let inputObj = []; // 传递给popup的表单元素对象数组
                 let $inputs = null;
-                let tempRadioName = '';
+                let tempRadioName = ''; // 临时保存添加的radio name
 
                 /**
                  * 分析页面上的表单元素
@@ -172,7 +194,7 @@ function createTextarea (obj) {
                 $inputs.each(function (index, item) {
                     let color = randomColor();
                     let $item = $(item);
-                    let offset = $item.offset();
+                    let offset = $item.show().offset();
                     let tagName = $item.prop('tagName');
                     let type =  $item.attr('type');
                     let name = $item.attr('name');
@@ -198,8 +220,8 @@ function createTextarea (obj) {
 
                     if (type !== 'hidden') {
                         $div.css({
-                            'width': 'atuo',
-                            'height': '30px',
+                            // 'width': 'atuo',
+                            // 'height': '30px',
                             'background': color,
                             'line-height': '30px',
                             'text-align': 'center',
@@ -209,12 +231,14 @@ function createTextarea (obj) {
                             'position': 'absolute',
                             'top': offset.top + 'px',
                             'left': offset.left + 'px',
-                            'z-index': 9999999
+                            'z-index': 9999999,
+                            'width': '5px',
+                            'height': '5px',
                         })
                         .html(color + '<p></p>');
 
                         $div.css({
-                            'margin-left': ($div.width() + 30) * -1 + 'px',
+                            'margin-left': ($div.width() + 30) * - 1 + 'px',
                         });
                     } else {
                         // 隐藏表单
@@ -264,9 +288,9 @@ function createTextarea (obj) {
                         'opacity': 1
                     });
 
-                    // TODO: bohai 筛选 input[type="radio"] input[type="checkbox"]
-
+                    // 写入页面表单对象
                     if (type === 'radio' && tempRadioName.indexOf(name) === -1) {
+                        //筛选 input[type="radio"] input[type="checkbox"]
                         tempRadioName += name + ',';
                         inputObj.push({
                             id,
@@ -277,7 +301,24 @@ function createTextarea (obj) {
                             value,
                             color: color
                         });
-                    } else if (type !== 'radio') {
+                    } else if (type === 'checkbox') {
+                        $item.each(function (index, item) {
+                            let $item = $(item);
+
+                            if ($item.prop('checked')) {
+                                inputObj.push({
+                                    id: $item.attr('id'),
+                                    name: $item.attr('name'),
+                                    klass: $item.attr('class'),
+                                    type: $item.attr('type'),
+                                    tagname: tagName,
+                                    value: $item.val(),
+                                    color: color
+                                });
+                            }
+
+                        });
+                    } else if (type !== 'radio' && type !== 'checkbox') {
                         inputObj.push({
                             id,
                             name,
