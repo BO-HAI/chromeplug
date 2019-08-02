@@ -1,3 +1,5 @@
+let timers = {}; // 轮询集合
+
 function randomColor () {
     let i = 0,
         str = "#",
@@ -78,12 +80,32 @@ function createCheckbox (obj) {
 
 function createSelect (obj) {
     let $element = getElement(obj);
+    // let timer = null;
+    let $e = null;
 
     if ($element.html() === '') {
         $element.append('<option value="' + obj.value + '">自动表单填写值</option>');
     }
 
     $element.val(obj.value);
+
+    // 针对 环球网校 eui
+    if ($element.length === 0) {
+        // 这里轮训解决联动问题,直到组件被初始化完成
+        timers[obj.value] = setInterval(function () {
+            $e = getElement(obj);
+
+            if ($e.length > 0) {
+                $e.siblings('.drop-down-item-list').find('[data-key="' + obj.value + '"]').trigger('click');
+                // $e.siblings('.drop-down-item-list');
+                clearInterval(timers[obj.value]);
+            }
+
+        }, 500);
+    } else {
+        $element.siblings('.drop-down-item-list').find('[data-key="' + obj.value + '"]').trigger('click');
+    }
+
 }
 
 function createTextarea (obj) {
