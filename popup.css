@@ -41,6 +41,10 @@ header .logo-block {
     position: relative;
 }
 
+header .logo-block .logo-img {
+    display: none;
+}
+
 header .logo-block .span-1 {
     position: absolute;
     top: -8px;
@@ -111,7 +115,7 @@ input, textarea, select, button {
     padding: 0 5px;
     margin: 5px 10px;
     float: left;
-    border-bottom: 1px solid #e6e6e6;
+    /* border-bottom: 1px solid #e6e6e6; */
 }
 
 .tab-block-1 .u_name:hover {
@@ -270,4 +274,76 @@ input {
 #analyse-form .form-group {
     color: #ffffff;
     /* margin-top: 20px; */
+}
+
+
+.theme-1 header {
+    background: #ffffff;
+}
+
+.theme-1 header .logo-block .logo-img {
+    float: left;
+    width: 90px;
+    margin-top: 6px;
+    margin-left: 10px;
+    display: block;
+}
+
+.theme-1 header .logo-block .span-1 {
+    position: absolute;
+    top: -8px;
+    right: 64px;
+    left: auto;
+    color: #b4b4b4;
+}
+
+.theme-1 header .logo-block .span-2 {
+    position: absolute;
+    bottom: -3px;
+    right: 5px;
+    left: auto;
+    color: #cdcdcd;
+}
+
+.theme-1 header nav span.active:before {
+    /* color: #f7b1b1; */
+    /* color: #3d3d3d; */
+    color: #ff8283;
+    background: #ff8283;
+}
+
+.theme-1 header nav span:before {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: #e1e1e1;
+    position: absolute;
+    bottom: 0;
+}
+
+.theme-1 .tab-block-1 form {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #ffffff;
+    /* background: #f1f1f1; */
+    /* background: #ffffff; */
+    background: #ffffff;
+    padding-bottom: 20px;
+    color: #333333;
+}
+
+.theme-1 .tab-block-1 form input {
+    background: #ffffff;
+    padding: 0 10px;
+}
+
+.theme-1 .tab-block-2 .button-group {
+    text-align: center;
+    /* background: #f1f1f1; */
+    /* background: #ffffff; */
+    background: #ffffff;
+    padding: 20px 0;
+    color: #333333;
+    border-top: 1px solid #ffffff;
 }
