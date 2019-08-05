@@ -28,7 +28,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["http://www.hqwx.com/*", "http://user.hqwx.com/*", "http://localhost:9003/"],
+            "matches": ["http://*/*"],
             "js": ["1.11.0.js", "login.js"]
         }
     ]
