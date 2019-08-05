@@ -69,6 +69,12 @@ function createCheckbox (obj) {
     $elements.each(function (index, item) {
         console.log(item);
         let $item = $(item);
+
+        // 恢复默认状态
+        $item.prop('checked', false);
+        $item.parent('.eui.checkbox').removeClass('active'); // 针对 环球网校 eui
+
+        // 设置选中
         if ($item.val() === obj.value) {
             $item.prop('checked', true);
 
